@@ -3,11 +3,13 @@ import os
 
 
 
-def search(type_of_place, longitude: float, latitude: float):
+def search(type_of_place, longitude: float, latitude: float, range: float):
     try:
         YANDEX_TOKEN = os.environ['YANDEX_TOKEN']
+        if range == "":
+            range = 0.223456
         request = "https://search-maps.yandex.ru/v1/?text=" + type_of_place + "&ll=" + str(longitude) + "," + str(
-            latitude) + "&spn=0.223456,0.223456&lang=en_EN&apikey=" + YANDEX_TOKEN
+            latitude) + "&spn="+str(range) + "," + str(range) + "&lang=en_EN&apikey=" + YANDEX_TOKEN
         data = requests.get(request)
         response = data.json()
         i = 0
