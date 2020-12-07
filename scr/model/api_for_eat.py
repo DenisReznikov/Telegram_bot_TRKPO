@@ -5,7 +5,7 @@ import os
 
 def search(type_of_place, longitude: float, latitude: float, range: float):
     try:
-        YANDEX_TOKEN = os.environ['YANDEX_TOKEN']
+        YANDEX_TOKEN = "ca2c7dc4-1acc-4bbb-8785-d0ba647c2926"
         if range == "":
             range = 0.223456
         request = "https://search-maps.yandex.ru/v1/?text=" + type_of_place + "&ll=" + str(longitude) + "," + str(
