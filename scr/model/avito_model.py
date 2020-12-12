@@ -1,6 +1,16 @@
 import datetime
+import urllib.parse
+from collections import namedtuple
 
+import bs4
 import requests
+
+InnerBlock = namedtuple('Block', 'title,price,currency,date,url')
+
+
+class Block(InnerBlock):
+    def __str__(self):
+        return f'{self.title}\nЦена: {self.price} {self.currency} \nДата размещения: {self.date}\nСсылка: {self.url}'
 
 
 class AvitoParser:
@@ -74,3 +84,70 @@ class AvitoParser:
         else:
             print('Не смогли разобрать формат:', item)
             return
+
+    def parse_block(self, item):
+        # Выбрать блок со ссылкой
+        url_block = item.select_one('a.snippet-link')
+        href = url_block.get('href')
+        if href:
+            url = 'https://www.avito.ru' + href
+        else:
+            url = None
+
+        # Выбрать блок с названием
+        title_block = item.select_one('a.snippet-link')
+        title = title_block.text.strip()
+
+        # Выбрать блок с названием и валютой
+        price_block = item.select_one('span.price')
+        price_block = price_block.get_text('\n')
+        price_block = list(filter(None, map(lambda i: i.strip(), price_block.split('\n'))))
+        if len(price_block) == 2:
+            price, currency = price_block
+        elif len(price_block) == 1:
+            # Бесплатно
+            price, currency = 0, None
+        else:
+            price, currency = None, None
+            print(f'Что-то пошло не так при поиске цены: {price_block}, {url}')
+
+        # Выбрать блок с датой размещения объявления
+        date = None
+        date_block = item.select_one('div.item-date div.js-item-date.c-2')
+        absolute_date = date_block.get('data-absolute-date')
+        if absolute_date:
+            date = self.parse_date(item=absolute_date)
+
+        return Block(
+            url=url,
+            title=title,
+            price=price,
+            currency=currency,
+            date=date,
+        )
+
+    def get_pagination_limit(self):
+        text = self.get_page()
+        soup = bs4.BeautifulSoup(text, 'lxml')
+
+        container = soup.select('a.pagination-page')
+        last_button = container[-1]
+        href = last_button.get('href')
+        if not href:
+            return 1
+
+        r = urllib.parse.urlparse(href)
+        params = urllib.parse.parse_qs(r.query)
+        return int(params['p'][0])
+
+    def get_blocks(self, page: int = 1):
+        text = self.get_page(page=page)
+        soup = bs4.BeautifulSoup(text, 'lxml')
+
+        # Запрос CSS-селектора, состоящего из множества классов, производится через select
+        container = soup.select('div.item.item_table.clearfix.js-catalog-item-enum.item-with-contact.js-item-extended')
+        array_for_block = []
+        for item in container:
+            block = self.parse_block(item=item)
+            array_for_block.append(block)
+        return array_for_block
