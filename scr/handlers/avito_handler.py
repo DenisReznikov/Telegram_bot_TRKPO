@@ -4,11 +4,13 @@ from telegram.ext import (CommandHandler, MessageHandler, Filters,
 from scr.other.keyboard import get_avito_keyboard
 from scr.other.metro_dict import metro_dictionary
 from scr.model.avito_model import AvitoParser
+from scr.other.logger import debug_requests
+
 
 METRO, TYPE_SORT = range(2)
 
 
-
+@debug_requests
 def do_avito(update: Update, context):
     print("Sada")
     update.message.reply_text(
@@ -17,7 +19,7 @@ def do_avito(update: Update, context):
     return METRO
 
 
-
+@debug_requests
 def add_metro(update: Update, context):
     context.user_data['object_for_search'] = update.message.text
     update.message.reply_text(
@@ -25,7 +27,7 @@ def add_metro(update: Update, context):
     return TYPE_SORT
 
 
-
+@debug_requests
 def choose_type_sort(update: Update, context):
     if update.message.text in metro_dictionary:
         context.user_data['metro'] = metro_dictionary[update.message.text]

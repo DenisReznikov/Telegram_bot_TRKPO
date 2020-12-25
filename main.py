@@ -17,7 +17,7 @@ def do_start(update: Update, context):
              "\n Я твой помощник." \
              "Если вы хотите пить или есть, нажмите -> /eat \n" \
              " \n"\
-             "Чтобы посмотреть погоду - /weather" \
+             "Чтобы посмотреть погоду - /weather \n" \
              "Или если вы хотите я могу найти что-то на Авито, нажмите - /avito" \
 
     update.message.reply_text(text=answer, reply_markup=keyboard)
@@ -26,7 +26,7 @@ def do_start(update: Update, context):
 
 def main():
     TOKEN =  ['TELEGRAM_TOKEN']
-    updater = Updater("790323839:AAGCpqOp4LXWd3O0DNYem32FyzF-32kRyGk", use_context=True)
+    updater = Updater("1486083484:AAEBHCVAtKRQRD0neNbem7NgrUAnbIo2enU", use_context=True)
     updater.dispatcher.add_handler(CommandHandler("start", do_start))
     updater.dispatcher.add_handler(eat_handler())
     updater.dispatcher.add_handler(weather_handler())
