@@ -18,9 +18,11 @@ def request_current_weather(city_name="", lon=0, lat=0):
         answer += "temp_max:    " + str(data['main']['temp_max']) + '°C' + '\n'
         return answer
     except Exception as e:
-        print("Exception (weather):", e)
-        return 'Something go wrong'
+        print("Exception (forecast):", e)
+        return "Что-то пошло не так"
         pass
+
+
 def get_wind_direction(deg):
     compass_point = [' N ', 'NE ', ' E ', 'SE ', ' S ', 'SW ', ' W ', 'NW ']
     res = ""
@@ -48,12 +50,12 @@ def request_forecast(city_name="", lon=0, lat=0):
         data = res.json()
         answer = ''
         for i in data['list']:
-            answer += str((i['dt_txt'])[:16] + '{0:+3.0f}'.format(i['main']['temp']) +
-                          '{0:2.0f}'.format(i['wind']['speed']) + " m/s  " +
+            answer += str((i['dt_txt'])[:16] + '{0:+3.0f}'.format(i['main']['temp']) + " °C"
+                                                                                       '{0:2.0f}'.format(i['wind']['speed']) + " m/s  " +
                           "direction of the wind: " + get_wind_direction(i['wind']['deg']) + " " +
                           i['weather'][0]['description']) + "\n"
         return answer
     except Exception as e:
         print("Exception (forecast):", e)
-        return "Something go wrong"
+        return "Что-то пошло не так"
         pass
