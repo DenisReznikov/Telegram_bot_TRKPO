@@ -15,7 +15,7 @@ def search(type_of_place, longitude: float, latitude: float, range=0.223456, cou
         result = {}
         if response == "":
             return 1
-        while i < 3:
+        while i < count:
             place = type_of_place + ": " + response['features'][i]['properties']['name'] + "\n"
 
             addres = "Адресс:" + response['features'][i]['properties']['description'] + "\n"
