@@ -1,43 +1,47 @@
 from telegram import Update
-from telegram.ext import (CommandHandler, MessageHandler, Filters,
-                          ConversationHandler, CallbackQueryHandler, CallbackContext)
+from telegram.ext import (
+                          ConversationHandler,  CallbackContext)
 from scr.other.keyboard import get_avito_keyboard
 from scr.other.metro_dict import metro_dictionary
 from scr.model.avito_model import AvitoParser
+import scr.other.state as s
 from scr.other.logger import debug_requests
 
-
-METRO, TYPE_SORT = range(2)
 
 
 @debug_requests
 def do_avito(update: Update, context):
-    print("Sada")
     update.message.reply_text(
         text="Напишите название вещи для поиска. Например: BMW",
     )
-    return METRO
+    return s.AVITO_METRO
 
 
 @debug_requests
 def add_metro(update: Update, context):
     context.user_data['object_for_search'] = update.message.text
+    print(context.user_data['object_for_search'])
+
     update.message.reply_text(
         text="Теперь напишите свое метро",)
-    return TYPE_SORT
+    return s.AVITO_TYPE_SORT
 
 
 @debug_requests
 def choose_type_sort(update: Update, context):
+
     if update.message.text in metro_dictionary:
+
         context.user_data['metro'] = metro_dictionary[update.message.text]
+        print(context.user_data['metro'])
     else:
-        update.message.reply_text(text="Такого метро я не знаю. Пока 👋")
-        context.user_data.clear()
-        return ConversationHandler.END
+        update.message.reply_text(text="Такого метро я не знаю. Давй ещё раз.")
+
+        return s.AVITO_TYPE_SORT
     update.message.reply_text(
         text="Теперь выберите порядок сортировки",
         reply_markup=get_avito_keyboard())
+    return s.AVITO_FINAL
 
 
 @debug_requests
@@ -58,15 +62,3 @@ def send_result(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
-
-def avito_handler():
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('avito', do_avito)],
-        states={
-            METRO: [MessageHandler(Filters.text, add_metro)],
-            TYPE_SORT: [MessageHandler(Filters.text, choose_type_sort)]
-
-        },
-        fallbacks=[CallbackQueryHandler(send_result)]
-    )
-    return conv_handler
