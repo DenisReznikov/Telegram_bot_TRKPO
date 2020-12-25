@@ -19,7 +19,8 @@ def do_start(update: Update, context):
              "\nЯ твой помощник." \
              "\n\nЕсли вы хотите пить или есть, нажмите -> /eat \n\n" \
              "Чтобы посмотреть погоду - /weather \n\n" \
-             "Или если вы хотите я могу найти что-то на Авито, нажмите - /avito"
+             "Или если вы хотите я могу найти что-то на Авито, нажмите - /avito \n\n" \
+             "Для прекращения общения нажмите /end"
 
     update.message.reply_text(text=answer, reply_markup=keyboard)
     return s.ALL_FIRST_COMMAND
@@ -53,7 +54,8 @@ def main():
                        MessageHandler(Filters.text, weather.do_city)],
             s.RESULT_WEATHER:[CommandHandler("end", do_end),CallbackQueryHandler(weather.do_done)],
             s.CHOOSING_EAT: [CommandHandler("end", do_end),CallbackQueryHandler(eat.button)],
-            s.RESULT_EAT: [CommandHandler("end", do_end),MessageHandler(Filters.location, eat.do_done)]
+            s.RESULT_EAT: [CommandHandler("end", do_end),MessageHandler(Filters.location, eat.do_done)],
+            s.MORE_EAT: [CommandHandler("end", do_end),CommandHandler("more", eat.do_more_eat)]
         },
         fallbacks=[CommandHandler("end", do_end)]
     )
