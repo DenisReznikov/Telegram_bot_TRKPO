@@ -19,7 +19,6 @@ Also helps to find the right thing on avito.
     > python main.py
     
 ### Application architecture
-I tried to stick to the to the MVC pattern (Model-View-Controller) without view ¯\\_(ツ)_/¯.
 ```
 telegrambot/
 ├── scr/ 
