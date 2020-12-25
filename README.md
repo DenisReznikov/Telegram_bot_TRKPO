@@ -14,7 +14,7 @@ Also helps to find the right thing on avito.
 * [Python Telegram Bot](https://github.com/python-telegram-bot/python-telegram-bot) - library provides a pure Python interface for the Telegram Bot API
 * [requests](https://github.com/psf/requests) - library allows you to send HTTP requests
  ### Installing  
-    > git clone https://github.com/DenisReznikov/TelegramPolikekBot.git
+    > git clone https://github.com/DenisReznikov/Telegram_bot_TRKPO.git
     > pip install -r requirements.txt
     > python main.py
     
