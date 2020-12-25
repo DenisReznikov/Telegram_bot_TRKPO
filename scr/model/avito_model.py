@@ -38,68 +38,23 @@ class AvitoParser:
         r = self.session.get(url, params=params)
         return r.text
 
-    @staticmethod
-    def parse_date(item):
-        params = item.strip().split(' ')
-        # print(params)
-        if len(params) == 2:
-            day, time = params
-            if day == 'Сегодня':
-                date = datetime.date.today()
-            elif day == 'Вчера':
-                date = datetime.date.today() - datetime.timedelta(days=1)
-            else:
-                print('Не смогли разобрать день:', item)
-                return
-
-            time = datetime.datetime.strptime(time, '%H:%M').time()
-            return datetime.datetime.combine(date=date, time=time)
-
-        elif len(params) == 3:
-            day, month_hru, time = params
-            day = int(day)
-            months_map = {
-                'января': 1,
-                'февраля': 2,
-                'марта': 3,
-                'апреля': 4,
-                'мая': 5,
-                'июня': 6,
-                'июля': 7,
-                'августа': 8,
-                'сентября': 9,
-                'октября': 10,
-                'ноября': 11,
-                'декабря': 12,
-            }
-            month = months_map.get(month_hru)
-            if not month:
-                print('Не смогли разобрать месяц:', item)
-                return
-
-            today = datetime.datetime.today()
-            time = datetime.datetime.strptime(time, '%H:%M')
-            return datetime.datetime(day=day, month=month, year=today.year, hour=time.hour, minute=time.minute)
-
-        else:
-            print('Не смогли разобрать формат:', item)
-            return
 
     def parse_block(self, item):
         # Выбрать блок со ссылкой
-        url_block = item.select_one('a.snippet-link')
+        url_block = item.select_one('a.link-link-39EVK.link-design-default-2sPEv.title-root-395AQ.iva-item-title-1Rmmj.title-list-1IIB_.title-root_maxHeight-3obWc')
         href = url_block.get('href')
+
         if href:
             url = 'https://www.avito.ru' + href
         else:
             url = None
 
         # Выбрать блок с названием
-        title_block = item.select_one('a.snippet-link')
+        title_block = item.select_one('div.iva-item-titleStep-2bjuh')
         title = title_block.text.strip()
 
         # Выбрать блок с названием и валютой
-        price_block = item.select_one('span.price')
+        price_block = item.select_one('span.price-text-1HrJ_.text-text-1PdBw.text-size-s-1PUdo')
         price_block = price_block.get_text('\n')
         price_block = list(filter(None, map(lambda i: i.strip(), price_block.split('\n'))))
         if len(price_block) == 2:
@@ -113,17 +68,17 @@ class AvitoParser:
 
         # Выбрать блок с датой размещения объявления
         date = None
-        date_block = item.select_one('div.item-date div.js-item-date.c-2')
-        absolute_date = date_block.get('data-absolute-date')
-        if absolute_date:
-            date = self.parse_date(item=absolute_date)
+        date_block = item.select_one('div.date-text-2jSvU.text-text-1PdBw.text-size-s-1PUdo.text-color-noaccent-bzEdI')
+
+        absolute_date = date_block.get_text()
+
 
         return Block(
             url=url,
             title=title,
             price=price,
             currency=currency,
-            date=date,
+            date=absolute_date,
         )
 
     def get_pagination_limit(self):
@@ -145,8 +100,9 @@ class AvitoParser:
         soup = bs4.BeautifulSoup(text, 'lxml')
 
         # Запрос CSS-селектора, состоящего из множества классов, производится через select
-        container = soup.select('div.item.item_table.clearfix.js-catalog-item-enum.item-with-contact.js-item-extended')
+        container = soup.select('div.iva-item-root-G3n7v.photo-slider-slider-15LoY.iva-item-list-2_PpT.items-item-1Hoqq.items-listItem-11orH.js-catalog-item-enum')
         array_for_block = []
+        print(len(container))
         for item in container:
             block = self.parse_block(item=item)
             array_for_block.append(block)
