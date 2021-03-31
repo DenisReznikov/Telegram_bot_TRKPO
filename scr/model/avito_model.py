@@ -96,11 +96,14 @@ class AvitoParser:
         return int(params['p'][0])
 
     def get_blocks(self, page: int = 1):
+        
         text = self.get_page(page=page)
         soup = bs4.BeautifulSoup(text, 'lxml')
-
+        print(text)
+        print("--------------")
+        print(soup)
         # Запрос CSS-селектора, состоящего из множества классов, производится через select
-        container = soup.select('div.iva-item-root-G3n7v.photo-slider-slider-15LoY.iva-item-list-2_PpT.items-item-1Hoqq.items-listItem-11orH.js-catalog-item-enum')
+        container = soup.select('div.iva-item-root-G3n7v.photo-slider-slider-3tEix.iva-item-list-2_PpT.items-item-1Hoqq.items-listItem-11orH.js-catalog-item-enum')
         array_for_block = []
         print(len(container))
         for item in container:
