@@ -1,7 +1,7 @@
-from other.metro_dict import metro_dictionary
-from other.state import AVITO_METRO
-from other.logger import debug_requests
-from other.keyboard import get_yes_keyboard, get_avito_keyboard, get_place_keyboard
+from scr.other.metro_dict import metro_dictionary
+from scr.other.state import AVITO_METRO
+from scr.other.logger import debug_requests
+from scr.other.keyboard import get_yes_keyboard, get_avito_keyboard, get_place_keyboard
 
 
 # Тесты для инициализации словарей
