@@ -3,13 +3,13 @@ from datetime import datetime
 from telegram import Update, Chat, User, Bot, Location
 from telegram import Message, MessageEntity, CallbackQuery
 
-from handlers.handler_weather import do_start_weather, do_location, do_city, do_done
-from handlers.handler_eat import do_eat, button, do_done, do_more_eat
+from scr.handlers.handler_weather import do_start_weather, do_location, do_city, do_done
+from scr.handlers.handler_eat import do_eat, button, do_done, do_more_eat
 from handlers.avito_handler import do_avito, add_metro, choose_type_sort, send_result
 
-from handlers import handler_eat
-from handlers import handler_weather
-from other.keyboard import get_place_keyboard
+from scr.handlers import handler_eat
+from scr.handlers import handler_weather
+from scr.other.keyboard import get_place_keyboard
 
 
 def test_do_start_weather():
