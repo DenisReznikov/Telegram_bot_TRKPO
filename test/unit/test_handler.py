@@ -5,7 +5,7 @@ from telegram import Message, MessageEntity, CallbackQuery
 
 from scr.handlers.handler_weather import do_start_weather, do_location, do_city, do_done
 from scr.handlers.handler_eat import do_eat, button, do_done, do_more_eat
-from handlers.avito_handler import do_avito, add_metro, choose_type_sort, send_result
+from scr.handlers.avito_handler import do_avito, add_metro, choose_type_sort, send_result
 
 from scr.handlers import handler_eat
 from scr.handlers import handler_weather
