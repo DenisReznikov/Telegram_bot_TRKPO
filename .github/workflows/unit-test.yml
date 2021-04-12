@@ -1,4 +1,4 @@
-name: bot unit test
+name: unit test
 
 on: [push]
 
