@@ -3,7 +3,6 @@ from scr.other.state import AVITO_METRO
 from scr.other.logger import debug_requests
 from scr.other.keyboard import get_yes_keyboard, get_avito_keyboard, get_place_keyboard
 
-
 # Тесты для инициализации словарей
 
 def test_metro_dictionary():
@@ -30,3 +29,4 @@ def test_get_place_keyboard():
                          [{'text': 'Restaurant 🍽️', 'callback_data': 'Ресторан'}]]}
     answer = get_place_keyboard()
     assert responce != answer
+    
