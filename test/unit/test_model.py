@@ -1,6 +1,6 @@
-from model.api_for_weather import get_wind_direction, request_current_weather, request_forecast
-from model.api_for_eat import search
-from model.avito_model import Block, AvitoParser
+from scr.model.api_for_weather import get_wind_direction, request_current_weather, request_forecast
+from scr.model.api_for_eat import search
+from scr.model.avito_model import Block, AvitoParser
 import requests
 from bs4 import BeautifulSoup
 
